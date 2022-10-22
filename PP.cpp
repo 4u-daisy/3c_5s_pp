@@ -2,7 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
-
+#include <cstdlib>
+#include <omp.h>
 
 /// <summary>
 /// mulls matrix
@@ -25,10 +26,14 @@ std::vector<std::vector<int>> MullMatrix(std::vector<std::vector<int>> _matrOne,
 		_matrRes[i].resize(columns);
 	}
 
-	for (auto i = 0; i < rows; i++) {
-		for (auto j = 0; j < columns; j++) {
+	int threadsNum = 8;
+	omp_set_num_threads(threadsNum);
+	int i, j, k;
+#pragma omp parallel for shared(_matrOne, _matrTwo, _matrRes) private(i, j, k)
+	for (i = 0; i < rows; i++) {
+		for (j = 0; j < columns; j++) {
 			_matrRes[i][j] = 0;
-			for (auto k = 0; k < _matrTwo.size(); k++) {
+			for (k = 0; k < _matrTwo.size(); k++) {
 				_matrRes[i][j] += _matrOne[i][k] * _matrTwo[k][j];
 			}
 		}
@@ -141,8 +146,6 @@ void PrintMatrix(const std::vector<std::vector<int>> _matr) {
 
 int main() {
 
-	srand(time(0));
-
 	const int SIZE = 2500;
 
 	std::vector<std::vector<int>> a = CreateRandomMatrix(SIZE, SIZE);
@@ -155,8 +158,10 @@ int main() {
 	auto res = (double)(end - start)/CLOCKS_PER_SEC;
 
 	std::ofstream result;
-	result.open("result.txt", std::ios::app);
-	result << "Size: " << SIZE << " Result: " << res << std::endl;
+	result.open("result2.txt", std::ios::app);
+	
+	//result << "Size: Result: Count threads:" << std::endl;
+	result << SIZE << " " << res << " " << 8 << std::endl;
 	result.close();
 
 	std::cout << res << std::endl;

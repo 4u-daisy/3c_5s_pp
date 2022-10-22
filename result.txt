@@ -1,0 +1,10 @@
+Size: 10 Result: 0
+Size: 100 Result: 0.031
+Size: 200 Result: 0.307
+Size: 300 Result: 1.19
+Size: 400 Result: 2.562
+Size: 500 Result: 4.627
+Size: 1000 Result: 38.553
+Size: 2000 Result: 336.262
+Size: 2500 Result: 643.793
+
